@@ -40,7 +40,6 @@
     - getUserByUsername
         - GET
         - PathVariable ("/user/{username}")
-
 - `/role`
     - addUser
         - POST
@@ -60,14 +59,12 @@
     - getUserByUsername
         - GET
         - PathVariable ("/user/{username}")
-
 - `/permission`
     - addUser
         - POST
         - Body: User entity
     - updateUser
         - PUT
-        - PathVariable ("/user/{id}")
         - Body: User entity
     - deleteUser
         - DELETE
@@ -114,46 +111,42 @@
 
 # Entity/Model/POJO
 
-```
+```json
 User: {
-    id: "1",
-    username: "klen",
-    password: "123456",
-    role: "admin"
+    "username": "klen",
+    "password": "123456",
+    "role": "admin"
 }
 
 Role: {
-    id:"1",
-    code: "ROLE_ADMIN",
-    name: "admin",
-    permission: "..."
+    "code": "ROLE_ADMIN",
+    "name": "admin",
+    "permission": "..."
 
 }
 
 Permission: {
-    id: 1,
-    code: "用户权限",
-    name: "user"
+    "code": "用户权限",
+    "name": "user"
 }
 
 
 Music: {
-    name : "",
-    author : "",
-    user: "",
-    album : "",
-    playlist : "",
-    type : ,
-    tag : ,
-    addDate : ,
-    publishDate: ,
-    genre : ,
-    url : 
+    "name" : "",
+    "author" : "",
+    "user": "",
+    "album" : "",
+    "playlist" : "",
+    "type" : ,
+    "tag" : ,
+    "addDate" : ,
+    "publishDate": ,
+    "genre" : ,
+    "url" : 
 }
 
 Author: {
-    id: "1",
-    name: "peter"
+    name": "peter"
 }
 
 ```
