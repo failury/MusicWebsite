@@ -36,23 +36,25 @@ Coded by www.creative-tim.com
 */
 
 // Layouts
-import Dashboard from "layouts/dashboard";
+// import Dashboard from "layouts/dashboard";
 import Users from "layouts/users";
+import Permissions from "layouts/permissions";
 
 // Icons
-import Shop from "examples/Icons/Shop";
+// import Shop from "examples/Icons/Shop";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 const routes = [
-  {
-    type: "collapse",
-    name: "Dashboard",
-    key: "dashboard",
-    route: "/dashboard",
-    icon: <Shop size="12px" />,
-    component: Dashboard,
-    noCollapse: true,
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Dashboard",
+  //   key: "dashboard",
+  //   route: "/dashboard",
+  //   icon: <Shop size="12px" />,
+  //   component: Dashboard,
+  //   noCollapse: true,
+  // },
   {
     type: "collapse",
     name: "Users",
@@ -60,6 +62,15 @@ const routes = [
     route: "/users",
     icon: <SupervisedUserCircleIcon />,
     component: Users,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Permissions",
+    key: "permissions",
+    route: "/permissions",
+    icon: <AdminPanelSettingsIcon />,
+    component: Permissions,
     noCollapse: true,
   },
 ];
