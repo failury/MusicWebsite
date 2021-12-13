@@ -27,7 +27,6 @@
         - Body: User entity
     - updateUser
         - PUT
-        - PathVariable ("/user/{id}")
         - Body: User entity
     - deleteUser
         - DELETE
@@ -46,7 +45,6 @@
         - Body: User entity
     - updateUser
         - PUT
-        - PathVariable ("/user/{id}")
         - Body: User entity
     - deleteUser
         - DELETE
