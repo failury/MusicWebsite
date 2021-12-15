@@ -14,7 +14,7 @@ public class SysUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column
+    @Column(unique = true, nullable = false)
     private String username;
     @Column
     private String password;
