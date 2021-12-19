@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @Description:
- * @Author: Jianyu Qiu (Kalen)
+ * @Author: klenq
  * @CreateTime: 2021/12/13
  */
 @Configuration
