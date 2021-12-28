@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 /* eslint-disable import/no-unresolved */
 /**
 =========================================================
@@ -36,7 +37,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Stack } from "@mui/material";
-import AddUser from "components/AddUser";
+import AddUser from "components/AddDialogs/AddUser";
 
 function Users() {
   const [open, setOpen] = React.useState(false);
@@ -46,20 +47,6 @@ function Users() {
   };
   const handleClose = () => {
     setOpen(false);
-  };
-  const handleDelete = async (id) => {
-    try {
-      const res = await axios.delete(`http://localhost:8090/user/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (res.data === true) {
-        window.location.reload(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
   const fetchData = async function f() {
     try {
@@ -100,6 +87,20 @@ function Users() {
       console.log(error);
     }
   };
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:8090/user/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.data === true) {
+        fetchData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   React.useEffect(() => {
     fetchData();
   }, []);
@@ -112,7 +113,7 @@ function Users() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <AddUser />
+      <AddUser callback={fetchData} />
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Card>

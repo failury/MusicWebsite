@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 /* eslint-disable import/no-unresolved */
 /**
 =========================================================
@@ -36,19 +37,82 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Stack } from "@mui/material";
+import AddRole from "components/AddDialogs/AddRole";
+import ImutableChips from "components/ImutableChips";
+import ChipsArray from "components/ChipsArray";
 
 function Roles() {
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState([]);
-  const handleClickOpen = () => {
+  const [perms, setPerms] = React.useState([]);
+  const [name, setName] = React.useState("");
+  const [code, setCode] = React.useState("");
+  const [id, setId] = React.useState(0);
+  const handleClickOpen = (c, n, p, i) => {
+    setName(n);
+    setCode(c);
+    setId(i);
+    setPerms(p);
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+  const handleDelete = async (i) => {
+    try {
+      const res = await axios.delete(`http://localhost:8090/role/${i}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.data === true) {
+        fetchData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchpermissions = async () => {
+    try {
+      const res = await axios.get("http://localhost:8090/permission", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setPerms(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleUpdate = async () => {
+    try {
+      const permissions = perms;
+      permissions.forEach((e) => {
+        delete e.code;
+        delete e.name;
+      });
+      const Obj = {
+        id,
+        name,
+        code,
+        permissions,
+      };
+      const res = await axios.put(`http://localhost:8090/role/`, Obj, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.data === true) {
+        fetchData();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const fetchData = async function f() {
     try {
-      const res = await axios.get("http://localhost:8090/user", {
+      const res = await axios.get("http://localhost:8090/role", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -56,17 +120,31 @@ function Roles() {
       const obj = res.data;
       obj.forEach((e) => {
         e.action = (
-          <SuiTypography
-            component="a"
-            href="#"
-            variant="caption"
-            color="secondary"
-            fontWeight="medium"
-            onClick={handleClickOpen}
-          >
-            Edit
-          </SuiTypography>
+          <Stack direction="row" spacing={2}>
+            <SuiTypography
+              component="a"
+              href="#"
+              variant="caption"
+              color="secondary"
+              fontWeight="medium"
+              onClick={() => handleClickOpen(e.code, e.name, e.p, e.id)}
+            >
+              Edit
+            </SuiTypography>
+            <SuiTypography
+              component="a"
+              href="#"
+              variant="caption"
+              color="secondary"
+              fontWeight="medium"
+              onClick={() => handleDelete(e.id)}
+            >
+              Delete
+            </SuiTypography>
+          </Stack>
         );
+        e.p = e.permissions;
+        e.permissions = <ImutableChips chipData={e.permissions} />;
       });
       setData(obj);
     } catch (error) {
@@ -77,19 +155,20 @@ function Roles() {
     fetchData();
   }, []);
   const columns = [
-    { name: "username", align: "center" },
-    { name: "password", align: "center" },
-    { name: "role", align: "center" },
+    { name: "code", align: "center" },
+    { name: "name", align: "center" },
+    { name: "permissions", align: "center" },
     { name: "action", align: "center" },
   ];
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <AddRole callback={fetchData} />
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Card>
             <SuiBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SuiTypography variant="h6">Users</SuiTypography>
+              <SuiTypography variant="h6">Roles</SuiTypography>
             </SuiBox>
             <SuiBox
               sx={{
@@ -109,33 +188,40 @@ function Roles() {
                 <DialogContent>
                   <Stack direction="row" spacing={1}>
                     <Stack>
-                      <SuiTypography variant="caption">Username</SuiTypography>
-                      <SuiInput type="text" placeholder="username" />
+                      <SuiTypography variant="caption">Role Code</SuiTypography>
+                      <SuiInput
+                        type="text"
+                        placeholder="role code"
+                        value={code}
+                        onChange={(event) => {
+                          setCode(event.target.value);
+                        }}
+                      />
                     </Stack>
                     <Stack>
-                      <SuiTypography variant="caption">Password</SuiTypography>
-                      <SuiInput type="password" placeholder="password" />
-                    </Stack>
-                    {/* <Stack>
-                      <SuiTypography variant="caption">First Name</SuiTypography>
-                      <SuiInput type="text" placeholder="first name" />
+                      <SuiTypography variant="caption">Role Name</SuiTypography>
+                      <SuiInput
+                        type="text"
+                        placeholder="role name"
+                        value={name}
+                        onChange={(event) => {
+                          setName(event.target.value);
+                        }}
+                      />
                     </Stack>
                     <Stack>
-                      <SuiTypography variant="caption">Last Name</SuiTypography>
-                      <SuiInput type="text" placeholder="last name" />
-                    </Stack>
-                    <Stack>
-                      <SuiTypography variant="caption">Email Address</SuiTypography>
-                      <SuiInput type="email" placeholder="email address" />
-                    </Stack> */}
-                    <Stack>
-                      <SuiTypography variant="caption">Role</SuiTypography>
-                      <SuiInput type="text" placeholder="user role" />
+                      <SuiTypography variant="caption">Role Permissions</SuiTypography>
+                      <Stack direction="row">
+                        <ChipsArray chipData={perms} setChipData={setPerms} />
+                        <SuiButton onClick={fetchpermissions} size="small">
+                          Add all
+                        </SuiButton>
+                      </Stack>
                     </Stack>
                   </Stack>
                 </DialogContent>
                 <DialogActions>
-                  <SuiButton onClick={handleClose}>Save</SuiButton>
+                  <SuiButton onClick={() => handleUpdate()}>Save</SuiButton>
                   <SuiButton onClick={handleClose}>Cancel</SuiButton>
                 </DialogActions>
               </Dialog>

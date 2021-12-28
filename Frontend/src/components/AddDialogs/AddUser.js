@@ -12,7 +12,8 @@ import SuiTypography from "components/SuiTypography";
 import SuiInput from "components/SuiInput";
 import axios from "axios";
 
-export default function AddUser() {
+// eslint-disable-next-line react/prop-types
+export default function AddUser({ callback }) {
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState("");
   const [pass, setPass] = React.useState("");
@@ -38,7 +39,7 @@ export default function AddUser() {
         },
       });
       setOpen(false);
-      window.location.reload(false);
+      callback();
     } catch (error) {
       console.log(error);
     }

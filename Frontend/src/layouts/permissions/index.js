@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 /* eslint-disable import/no-unresolved */
 /**
 =========================================================
@@ -36,18 +37,56 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Stack } from "@mui/material";
+import AddPermission from "components/AddDialogs/AddPermission";
 
 function Permissions() {
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState([]);
-  const handleClickOpen = () => {
+  const [name, setName] = React.useState("");
+  const [code, setCode] = React.useState("");
+  const [id, setId] = React.useState(0);
+  const handleClickOpen = (n, c, i) => {
+    setName(n);
+    setCode(c);
+    setId(i);
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const handleDelete = () => {
-    // TODO
+  const handleDelete = async (i) => {
+    try {
+      const res = await axios.delete(`http://localhost:8090/permission/${i}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.data === true) {
+        fetchData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleUpdate = async () => {
+    try {
+      const Obj = {
+        id,
+        name,
+        code,
+      };
+      const res = await axios.put(`http://localhost:8090/permission/`, Obj, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.data === true) {
+        fetchData();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const fetchData = async function f() {
     try {
@@ -66,7 +105,7 @@ function Permissions() {
               variant="caption"
               color="secondary"
               fontWeight="medium"
-              onClick={handleClickOpen}
+              onClick={() => handleClickOpen(e.name, e.code, e.id)}
             >
               Edit
             </SuiTypography>
@@ -76,7 +115,7 @@ function Permissions() {
               variant="caption"
               color="secondary"
               fontWeight="medium"
-              onClick={handleDelete}
+              onClick={() => handleDelete(e.id)}
             >
               Delete
             </SuiTypography>
@@ -93,12 +132,12 @@ function Permissions() {
   }, []);
   const columns = [
     { name: "name", align: "center" },
-    { name: "code", align: "center" },
     { name: "action", align: "center" },
   ];
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <AddPermission callback={fetchData} />
       <SuiBox py={3}>
         <SuiBox mb={3}>
           <Card>
@@ -124,16 +163,30 @@ function Permissions() {
                   <Stack direction="row" spacing={1}>
                     <Stack>
                       <SuiTypography variant="caption">Name</SuiTypography>
-                      <SuiInput type="text" placeholder="role name" />
+                      <SuiInput
+                        type="text"
+                        placeholder="role name"
+                        value={name}
+                        onChange={(event) => {
+                          setName(event.target.value);
+                        }}
+                      />
                     </Stack>
                     <Stack>
                       <SuiTypography variant="caption">Code</SuiTypography>
-                      <SuiInput type="text" placeholder="role code" />
+                      <SuiInput
+                        type="text"
+                        placeholder="role code"
+                        value={code}
+                        onChange={(event) => {
+                          setCode(event.target.value);
+                        }}
+                      />
                     </Stack>
                   </Stack>
                 </DialogContent>
                 <DialogActions>
-                  <SuiButton onClick={handleClose}>Save</SuiButton>
+                  <SuiButton onClick={() => handleUpdate()}>Save</SuiButton>
                   <SuiButton onClick={handleClose}>Cancel</SuiButton>
                 </DialogActions>
               </Dialog>

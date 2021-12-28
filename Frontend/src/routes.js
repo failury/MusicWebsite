@@ -39,11 +39,13 @@ Coded by www.creative-tim.com
 // import Dashboard from "layouts/dashboard";
 import Users from "layouts/users";
 import Permissions from "layouts/permissions";
+import Roles from "layouts/roles";
 
 // Icons
 // import Shop from "examples/Icons/Shop";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 
 const routes = [
   // {
@@ -71,6 +73,15 @@ const routes = [
     route: "/permissions",
     icon: <AdminPanelSettingsIcon />,
     component: Permissions,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Roles",
+    key: "roles",
+    route: "/roles",
+    icon: <AssignmentIndIcon />,
+    component: Roles,
     noCollapse: true,
   },
 ];
