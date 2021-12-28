@@ -11,18 +11,32 @@ import { Stack } from "@mui/material";
 import SuiTypography from "components/SuiTypography";
 import SuiInput from "components/SuiInput";
 import axios from "axios";
+import ChipsArray from "components/ChipsArray";
 
 // eslint-disable-next-line react/prop-types
 export default function AddUser({ callback }) {
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState("");
   const [pass, setPass] = React.useState("");
-  const [role, setRole] = React.useState("");
+  const [role, setRole] = React.useState([]);
   const handleClickOpen = () => {
+    fetchroles();
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+  const fetchroles = async () => {
+    try {
+      const res = await axios.get("http://localhost:8090/role", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setRole(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleSubmit = async () => {
     try {
@@ -31,7 +45,7 @@ export default function AddUser({ callback }) {
         username: user,
         // eslint-disable-next-line object-shorthand
         password: pass,
-        roles: [],
+        roles: role,
       };
       await axios.post("http://localhost:8090/user", Obj, {
         headers: {
@@ -87,15 +101,11 @@ export default function AddUser({ callback }) {
                 }}
               />
             </Stack>
-            <Stack>
-              <SuiTypography variant="caption">Role</SuiTypography>
-              <SuiInput
-                type="text"
-                value={role}
-                onChange={(event) => {
-                  setRole(event.target.value);
-                }}
-              />
+            <Stack direction="row">
+              <ChipsArray chipData={role} setChipData={setRole} />
+              <SuiButton onClick={fetchroles} size="small">
+                Add all
+              </SuiButton>
             </Stack>
           </Stack>
         </DialogContent>

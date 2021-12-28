@@ -38,15 +38,37 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Stack } from "@mui/material";
 import AddUser from "components/AddDialogs/AddUser";
+import ImutableChips from "components/ImutableChips";
+import ChipsArray from "components/ChipsArray";
 
 function Users() {
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState([]);
-  const handleClickOpen = () => {
+  const [name, setName] = React.useState("");
+  const [pass, setPass] = React.useState("");
+  const [id, setId] = React.useState(0);
+  const [role, setRole] = React.useState([]);
+  const handleClickOpen = (n, p, i, r) => {
+    setName(n);
+    setPass(p);
+    setId(i);
+    setRole(r);
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+  const fetchroles = async () => {
+    try {
+      const res = await axios.get("http://localhost:8090/role", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setRole(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const fetchData = async function f() {
     try {
@@ -57,6 +79,8 @@ function Users() {
       });
       const obj = res.data;
       obj.forEach((e) => {
+        e.r = e.roles;
+        e.roles = <ImutableChips chipData={e.roles} />;
         e.action = (
           <Stack direction="row" spacing={2}>
             <SuiTypography
@@ -65,7 +89,7 @@ function Users() {
               variant="caption"
               color="secondary"
               fontWeight="medium"
-              onClick={handleClickOpen}
+              onClick={() => handleClickOpen(e.username, e.password, e.id, e.r)}
             >
               Edit
             </SuiTypography>
@@ -87,9 +111,35 @@ function Users() {
       console.log(error);
     }
   };
-  const handleDelete = async (id) => {
+  const handleUpdate = async () => {
     try {
-      const res = await axios.delete(`http://localhost:8090/user/${id}`, {
+      const roles = role;
+      roles.forEach((e) => {
+        delete e.code;
+        delete e.name;
+      });
+      const Obj = {
+        id,
+        username: name,
+        password: pass,
+        roles,
+      };
+      const res = await axios.put(`http://localhost:8090/user/`, Obj, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.data === true) {
+        fetchData();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDelete = async (i) => {
+    try {
+      const res = await axios.delete(`http://localhost:8090/user/${i}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -107,7 +157,7 @@ function Users() {
   const columns = [
     { name: "username", align: "center" },
     { name: "password", align: "center" },
-    { name: "role", align: "center" },
+    { name: "roles", align: "center" },
     { name: "action", align: "center" },
   ];
   return (
@@ -139,32 +189,39 @@ function Users() {
                   <Stack direction="row" spacing={1}>
                     <Stack>
                       <SuiTypography variant="caption">Username</SuiTypography>
-                      <SuiInput type="text" placeholder="username" />
+                      <SuiInput
+                        type="text"
+                        placeholder="username"
+                        value={name}
+                        onChange={(event) => {
+                          setName(event.target.value);
+                        }}
+                      />
                     </Stack>
                     <Stack>
                       <SuiTypography variant="caption">Password</SuiTypography>
-                      <SuiInput type="password" placeholder="password" />
+                      <SuiInput
+                        type="text"
+                        placeholder="password"
+                        value={pass}
+                        onChange={(event) => {
+                          setPass(event.target.value);
+                        }}
+                      />
                     </Stack>
-                    {/* <Stack>
-                      <SuiTypography variant="caption">First Name</SuiTypography>
-                      <SuiInput type="text" placeholder="first name" />
-                    </Stack>
-                    <Stack>
-                      <SuiTypography variant="caption">Last Name</SuiTypography>
-                      <SuiInput type="text" placeholder="last name" />
-                    </Stack>
-                    <Stack>
-                      <SuiTypography variant="caption">Email Address</SuiTypography>
-                      <SuiInput type="email" placeholder="email address" />
-                    </Stack> */}
                     <Stack>
                       <SuiTypography variant="caption">Role</SuiTypography>
-                      <SuiInput type="text" placeholder="user role" />
+                      <Stack direction="row">
+                        <ChipsArray chipData={role} setChipData={setRole} />
+                        <SuiButton onClick={fetchroles} size="small">
+                          Add all
+                        </SuiButton>
+                      </Stack>
                     </Stack>
                   </Stack>
                 </DialogContent>
                 <DialogActions>
-                  <SuiButton onClick={handleClose}>Save</SuiButton>
+                  <SuiButton onClick={handleUpdate}>Save</SuiButton>
                   <SuiButton onClick={handleClose}>Cancel</SuiButton>
                 </DialogActions>
               </Dialog>
