@@ -1,5 +1,7 @@
 package com.klen.musicweb.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  * @CreateTime: 2021/11/14
  */
 @Entity
+@Data
 @Table(name = "user")
 public class SysUser {
     @Id
@@ -26,48 +29,4 @@ public class SysUser {
     @OrderBy("id asc")
     private List<SysRole> roles;
 
-
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<SysRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<SysRole> roles) {
-        this.roles = roles;
-    }
-
-    @Override
-    public String toString() {
-        return "SysUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", roles=" + roles +
-                '}';
-    }
 }

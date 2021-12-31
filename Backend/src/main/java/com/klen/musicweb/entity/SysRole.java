@@ -1,5 +1,7 @@
 package com.klen.musicweb.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  * @CreateTime: 2021/11/14
  */
 @Entity
+@Data
 @Table(name = "role")
 public class SysRole {
     @Id
@@ -28,54 +31,4 @@ public class SysRole {
     @OrderBy("id asc")
     private List<SysPermission> permissions;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSort() {
-        return sort;
-    }
-
-    public void setSort(String sort) {
-        this.sort = sort;
-    }
-
-    public List<SysPermission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<SysPermission> permissions) {
-        this.permissions = permissions;
-    }
-
-    @Override
-    public String toString() {
-        return "SysRole{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", sort='" + sort + '\'' +
-                ", permissions=" + permissions +
-                '}';
-    }
 }

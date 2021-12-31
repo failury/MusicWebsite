@@ -1,5 +1,7 @@
 package com.klen.musicweb.entity;
 
+import lombok.Data;
+
 import java.util.Date;
 
 /**
@@ -7,6 +9,7 @@ import java.util.Date;
  * @Author: klenq
  * @CreateTime: 12/19/2021
  */
+@Data
 public class Subscriber {
     private Integer id;
 
