@@ -10,6 +10,7 @@ import java.util.Date;
  * @CreateTime: 12/19/2021
  */
 @Data
+@Deprecated
 public class Subscriber {
     private Integer id;
 

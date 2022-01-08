@@ -1,7 +1,9 @@
 package com.klen.musicweb.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Columns;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -10,18 +12,22 @@ import java.util.Date;
  * @CreateTime: 12/19/2021
  */
 @Data
+@Entity
+@Table(name = "author")
 public class Author {
+    @Id
     private Integer id;
-
+    @Column
     private String name;
-
+    @Column
     private Byte sex;
-
+    @Column
     private String pic;
-
+    @Column
     private Date birth;
-
+    @Column
     private String introduction;
 
-    //Join table, subscriber
+    //Join table, with music
+    //TODO
 }
